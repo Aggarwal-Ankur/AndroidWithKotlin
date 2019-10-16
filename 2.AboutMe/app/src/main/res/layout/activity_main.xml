@@ -1,52 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="@dimen/margin_medium"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/name_text"
-        style="@style/MyTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/name" />
-
-    <EditText
-        android:id="@+id/nickname_edit"
-        style="@style/MyTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/what_is_nickname"
-        android:inputType="textPersonName" />
-
-    <ImageView
-        android:id="@+id/star_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/yellow_star"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
-
-    <ScrollView
-        android:id="@+id/bio_scroll"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_medium"
-        android:paddingStart="@dimen/padding_small"
-        android:paddingEnd="@dimen/padding_small">
-
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
         <TextView
-            android:id="@+id/bio_text"
+            android:id="@+id/name_text"
             style="@style/MyTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/bio" />
-    </ScrollView>
+            android:text="@string/name" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/nickname_edit"
+            style="@style/MyTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/what_is_nickname"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/done_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="@string/done" />
+
+        <TextView
+            android:id="@+id/nickname_display"
+            style="@style/MyTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/star_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/yellow_star"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        <ScrollView
+            android:id="@+id/bio_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:paddingStart="@dimen/padding_small"
+            android:paddingEnd="@dimen/padding_small">
+
+
+            <TextView
+                android:id="@+id/bio_text"
+                style="@style/MyTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bio" />
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>
