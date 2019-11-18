@@ -1,11 +1,25 @@
 package com.example.android.guesstheword.screens.game
 
+import android.os.CountDownTimer
+import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
 class GameViewModel : ViewModel() {
+    companion object {
+        // These represent different important times
+        // This is when the game is over
+        const val DONE = 0L
+        // This is the number of milliseconds in a second
+        const val ONE_SECOND = 1000L
+        // This is the total time of the game
+        const val COUNTDOWN_TIME = 60 * ONE_SECOND
+    }
+
+    private val timer : CountDownTimer
+
     // The current word
     private val _word = MutableLiveData<String>()
     val word : LiveData<String>
@@ -23,11 +37,31 @@ class GameViewModel : ViewModel() {
     val eventGameFinished : LiveData<Boolean>
         get() = _eventGameFinished
 
+    private val _currentTime = MutableLiveData<String>()
+    val currentTime : LiveData<String>
+        get() = _currentTime
+
     init {
         Timber.i("init block called")
         _score.value = 0
         _word.value = ""
         _eventGameFinished.value = false
+
+        //_currentTime.value = DateUtils.formatElapsedTime(COUNTDOWN_TIME)
+
+        timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND){
+            override fun onFinish() {
+                _eventGameFinished.value = true
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                _currentTime.value = DateUtils.formatElapsedTime(millisUntilFinished / ONE_SECOND)
+                Timber.i("Current time = ${currentTime.value}")
+            }
+        }
+
+        timer.start()
+
         resetList()
         nextWord()
     }

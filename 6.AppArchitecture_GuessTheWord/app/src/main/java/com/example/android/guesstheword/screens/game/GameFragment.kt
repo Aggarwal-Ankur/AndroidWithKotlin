@@ -77,6 +77,11 @@ class GameFragment : Fragment() {
             }
         })
 
+        viewModel.currentTime.observe(this, Observer { timeString ->
+            binding.timerText.text = timeString
+
+        })
+
         return binding.root
 
     }
