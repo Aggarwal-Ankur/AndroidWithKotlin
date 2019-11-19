@@ -41,7 +41,7 @@ class GameFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-
+        Timber.i("onCreate")
 
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
@@ -53,9 +53,11 @@ class GameFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
-        Timber.i("onCreate")
+        binding.gameViewModel = viewModel
+        binding.lifecycleOwner = this
 
-        binding.correctButton.setOnClickListener {
+        //Set in XML using data-binding
+       /* binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
         }
         binding.skipButton.setOnClickListener {
@@ -68,7 +70,7 @@ class GameFragment : Fragment() {
 
         viewModel.word.observe(this, Observer {newWord ->
             binding.wordText.text = newWord
-        })
+        })*/
 
         viewModel.eventGameFinished.observe(this, Observer {hasFinished ->
             if(hasFinished) {

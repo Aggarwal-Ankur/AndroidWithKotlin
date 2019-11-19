@@ -31,7 +31,7 @@ class ScoreViewModel(finalScore : Int) : ViewModel() {
     }
 
     override fun onCleared() {
-        Timber.i("onCleared called")
+        Timber.i("onCleared. ScoreViewModel destroyed")
         super.onCleared()
     }
 }
