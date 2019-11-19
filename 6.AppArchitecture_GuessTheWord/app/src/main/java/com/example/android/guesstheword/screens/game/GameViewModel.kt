@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
@@ -37,9 +38,17 @@ class GameViewModel : ViewModel() {
     val eventGameFinished : LiveData<Boolean>
         get() = _eventGameFinished
 
-    private val _currentTime = MutableLiveData<String>()
-    val currentTime : LiveData<String>
+    private val _currentTime = MutableLiveData<Long>()
+    private val currentTime : LiveData<Long>
         get() = _currentTime
+
+    //Both the below forms work
+    /*val currentTimeString = Transformations.map(currentTime, {time ->
+        DateUtils.formatElapsedTime(time)
+    })*/
+    val currentTimeString = Transformations.map(currentTime) {time ->
+        DateUtils.formatElapsedTime(time)
+    }
 
     init {
         Timber.i("init block called")
@@ -55,7 +64,7 @@ class GameViewModel : ViewModel() {
             }
 
             override fun onTick(millisUntilFinished: Long) {
-                _currentTime.value = DateUtils.formatElapsedTime(millisUntilFinished / ONE_SECOND)
+                _currentTime.value = millisUntilFinished / ONE_SECOND
                 Timber.i("Current time = ${currentTime.value}")
             }
         }

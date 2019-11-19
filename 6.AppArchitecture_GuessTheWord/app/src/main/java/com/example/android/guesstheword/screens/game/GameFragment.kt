@@ -70,6 +70,11 @@ class GameFragment : Fragment() {
 
         viewModel.word.observe(this, Observer {newWord ->
             binding.wordText.text = newWord
+        })
+
+        viewModel.currentTime.observe(this, Observer { timeString ->
+            binding.timerText.text = timeString
+
         })*/
 
         viewModel.eventGameFinished.observe(this, Observer {hasFinished ->
@@ -77,11 +82,6 @@ class GameFragment : Fragment() {
                 gameFinished()
                 viewModel.onGameFinishCompleted()
             }
-        })
-
-        viewModel.currentTime.observe(this, Observer { timeString ->
-            binding.timerText.text = timeString
-
         })
 
         return binding.root
