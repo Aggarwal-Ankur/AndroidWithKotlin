@@ -8,6 +8,12 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
+//Define vibration patterns
+private val CORRECT_BUZZ_PATTERN = longArrayOf(100, 100, 100, 100, 100, 100)
+private val PANIC_BUZZ_PATTERN = longArrayOf(0, 200)
+private val GAME_OVER_BUZZ_PATTERN = longArrayOf(0, 2000)
+private val NO_BUZZ_PATTERN = longArrayOf(0)
+
 class GameViewModel : ViewModel() {
     companion object {
         // These represent different important times
@@ -16,7 +22,16 @@ class GameViewModel : ViewModel() {
         // This is the number of milliseconds in a second
         const val ONE_SECOND = 1000L
         // This is the total time of the game
-        const val COUNTDOWN_TIME = 10 * ONE_SECOND
+        const val COUNTDOWN_TIME = 60 * ONE_SECOND
+
+        const val PANIC_TIME = 10 * ONE_SECOND
+    }
+
+    enum class BuzzType(val pattern: LongArray) {
+        CORRECT(CORRECT_BUZZ_PATTERN),
+        GAME_OVER(GAME_OVER_BUZZ_PATTERN),
+        COUNTDOWN_PANIC(PANIC_BUZZ_PATTERN),
+        NO_BUZZ(NO_BUZZ_PATTERN)
     }
 
     private val timer : CountDownTimer
@@ -50,6 +65,10 @@ class GameViewModel : ViewModel() {
         DateUtils.formatElapsedTime(time)
     }
 
+    private val _eventBuzz = MutableLiveData<BuzzType>()
+    val eventBuzz : LiveData<BuzzType>
+        get() = _eventBuzz
+
     init {
         Timber.i("init block called")
         _score.value = 0
@@ -61,11 +80,16 @@ class GameViewModel : ViewModel() {
         timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND){
             override fun onFinish() {
                 _eventGameFinished.value = true
+                _eventBuzz.value = BuzzType.GAME_OVER;
             }
 
             override fun onTick(millisUntilFinished: Long) {
                 _currentTime.value = millisUntilFinished / ONE_SECOND
                 Timber.i("Current time = ${currentTime.value}")
+
+                if(millisUntilFinished <= PANIC_TIME){
+                    _eventBuzz.value = BuzzType.COUNTDOWN_PANIC;
+                }
             }
         }
 
@@ -89,6 +113,7 @@ class GameViewModel : ViewModel() {
 
     fun onCorrect() {
         _score.value = (_score.value)?.plus(1)
+        _eventBuzz.value = BuzzType.CORRECT;
         nextWord()
     }
 
@@ -129,6 +154,7 @@ class GameViewModel : ViewModel() {
         //Select and remove a word from the list
         if (wordList.isEmpty()) {
             _eventGameFinished.value = true
+            _eventBuzz.value = BuzzType.GAME_OVER;
         } else {
             _word.value = wordList.removeAt(0)
         }
