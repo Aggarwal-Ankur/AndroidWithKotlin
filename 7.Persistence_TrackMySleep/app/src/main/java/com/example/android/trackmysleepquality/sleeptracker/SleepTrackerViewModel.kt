@@ -75,6 +75,18 @@ class SleepTrackerViewModel(
         formatNights (nights, application.resources)
     }
 
+    private val _navigateToSleepData = MutableLiveData<Long>()
+    val navigateToSleepData
+        get() = _navigateToSleepData
+
+    fun onSleepNightClicked(id : Long) {
+        _navigateToSleepData.value = id
+    }
+
+    fun onSleepDataNavigated() {
+        _navigateToSleepData.value = null
+    }
+
     override fun onCleared() {
         viewModelJob.cancel()
         super.onCleared()
